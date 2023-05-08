@@ -1,5 +1,4 @@
 import torch
-import tiktoken
 import torch.nn as nn
 from torch.nn import functional as F
 
@@ -24,21 +23,16 @@ with open("input.txt", "r", encoding="utf-8") as f:
 
 
 def encdec(name):
-    if name == "tiktoken":
-        enc = tiktoken.get_encoding("gpt2")
-        encoder, decoder = enc.encode, enc.decode
-        vocab_size = enc.n_vocab
-    else:
-        chars = sorted(list(set(text)))
-        vocab_size = len(chars)
+    chars = sorted(list(set(text)))
+    vocab_size = len(chars)
 
-        # create a mapping from characters to integers
-        stoi = {ch: i for i, ch in enumerate(chars)}
-        itos = {i: ch for i, ch in enumerate(chars)}
-        # encoder: take a string, output a list of integers
-        encoder = lambda s: [stoi[c] for c in s]
-        # decoder: take a list of integers, output a string
-        decoder = lambda l: "".join([itos[i] for i in l])
+    # create a mapping from characters to integers
+    stoi = {ch: i for i, ch in enumerate(chars)}
+    itos = {i: ch for i, ch in enumerate(chars)}
+    # encoder: take a string, output a list of integers
+    encoder = lambda s: [stoi[c] for c in s]
+    # decoder: take a list of integers, output a string
+    decoder = lambda l: "".join([itos[i] for i in l])
 
     return encoder, decoder, vocab_size
 
